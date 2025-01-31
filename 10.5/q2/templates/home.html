@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Webpage</title>
+</head>
+<body>
+    <h1>{{ lst | join:" - " }}</h1>
+   <h1> {{ date|date:"SHORT_DATE_FORMAT" }}</h1>
+   <h1>{{ date | date }}</h1>
+   <h1>{{ n | add:"5" }}</h1>
+   <h1>{{'christmas' | capfirst}}</h1>
+   <h1>{{lst1 | cut:" "}}</h1>
+   <h1>{{lst | first}}</h1>
+   <h1>{{ arr| length}}</h1>
+   <h1>{{ lst1 | lower }}</h1>
+   <h1>{{ lst1 | upper }}</h1>
+   <h1>{{ lst1 | title }}</h1>
+   <h1>{{ lst | random }}</h1>
+   <h1>{{ lst | slice:":2" }}</h1>
+   <h1> {{ date | timesince }} </h1>
+   <h1>{{ lst1 | truncatechars:12 }}</h1>
+   <h1>{{ lst1 | wordcount }}</h1>
+   <h1>{{ lst1 | truncatewords:2 }}</h1>
+   <h1>{{ lst1 | center:"15" }}</h1>
+   <h1>{{ value | filesizeformat }}</h1>
+   <h1>{{ lst | join:" // " }}</h1>
+   <h1>{{ lst1 | slugify }}</h1>
+   <h1>{{ date | time:"H:i" }}</h1>
+   <h1>Time since blog post: {{ blog_date | timesince:comment_date }}</h1>
+
+</body>
+</html>

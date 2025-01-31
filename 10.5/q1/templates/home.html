@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1><a href="/">Home</a></h1>
+    <h1><a href="/app1/about/">about</a></h1>
+    <h1><a href="/app1/contact/">contact</a></h1>
+    <h1>this is home</h1>
+
+    <h2>Adress: {{adress}}</h2>
+        <h3>Age: {{age}}</h3>
+        <h4>List: {{lst}}</h4>
+        {% if age >= 18 %}
+        <h4>You are an adult</h4>
+        {% elif age >= 13 and age < 18 %} 
+        <h4>You are a teen ager</h4>
+        {% else %}
+        <h4>You are a child</h4>
+        {% endif %}
+
+        {% for i in courses %}
+        <h4>ID = {{i.id}}, Name = {{i.name}}, fee = {{i.fee}}</h4>
+        {% endfor %}
+</body>
+</html>

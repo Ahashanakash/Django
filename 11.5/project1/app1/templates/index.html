@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block c %}
+{{block.super}} 
+  <div class="d-flex flex-wrap gap-4 mt-3 container ">
+    {% for i in meals %}
+      <div class="card ms-5" style="width: 18rem;">
+        <img src="{{i.strMealThumb}}" class="card-img-top" alt="image" />
+        <div class="card-body">
+          <h5 class="card-title">{{ i.strMeal }}</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <h5 class="card-title">Meal ID - {{ i.idMeal }}</h5>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
+{% block a %}Menu{% endblock %}

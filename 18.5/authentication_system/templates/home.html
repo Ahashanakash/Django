@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+{% if messages %}
+{% for m in messages %}
+<p class="bg-success p-3 text-white">{{m}}</p>
+{% endfor %}
+{% endif %}
+  <h1>this is home</h1>
+{% endblock content %}

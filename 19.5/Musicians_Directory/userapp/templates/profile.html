@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% if messages %}
+    {% for m in messages %}
+    <p class="bg-success p-3 text-white">{{m}}</p>
+    {% endfor %}
+  {% endif %}
+<div>
+    <a class="btn btn-info" href="{% url "edit_profile" %}">edit profile</a>
+</div>
+
+{% endblock content %}

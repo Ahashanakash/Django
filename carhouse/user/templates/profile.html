@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% if messages %}
+    {% for m in messages %}
+    <p class="bg-success p-3 text-white">{{m}}</p>
+    {% endfor %}
+  {% endif %}
+<div>
+    <a class="btn btn-info" href="{% url "edit_profile" %}">edit profile</a>
+</div>
+  {% comment %} <div class="d-flex row">
+    {% for car in data %}
+      <div class="card col-3 m-auto text-center" style="width: 18rem;">
+        <img src="{{car.image.url}}" class="card-img-top img-fluid" alt="car photo">
+        <div class="card-body">
+          <h5 class="card-title ">{{ car.Car_name }}</a></h5>
+          <p class="card-text">{{ car.description |truncatewords:10}}</p>
+          <h5>Price - {{ car.price }}</h5>
+          <h5>Brand - <button class="btn btn-danger disabled px-1 py-0"><small class="text-white">{{ car.brand }}</button></small></h5>
+          <a href="{% url "cardetails" car.id%}" class="text-decoration-none btn btn-primary m-auto">View Details</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div> {% endcomment %}
+  <h2>Your Purchased Cars</h2>
+{% if car %}
+    <div class="d-flex gap-5 justify-content-around flex-wrap">
+        {% for car in car %}
+        <div class="card col-3 m-auto text-center" style="width: 18rem;">
+          <img src="{{car.image.url}}" class="card-img-top img-fluid" alt="car photo">
+          <div class="card-body">
+            <h5 class="card-title ">{{ car.Car_name }}</a></h5>
+            <p class="card-text">{{ car.description |truncatewords:10}}</p>
+            <h5>Price - {{ car.price }}</h5>
+            <h5>Brand - <button class="btn btn-danger disabled px-1 py-0"><small class="text-white">{{ car.brand }}</small></button></h5>
+            {% comment %} <a href="{% url "cardetails" car.id%}" class="text-decoration-none btn btn-primary m-auto">View Details</a> {% endcomment %}
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>You haven't purchased any car yet.</p>
+{% endif %}
+{% endblock content %}

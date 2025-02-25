@@ -10,10 +10,12 @@
       <h5>Price - {{ car.price }}</h5>
       <h5>Brand - <button class="btn btn-danger disabled px-1 py-0"><small class="text-white">{{ car.brand }}</small></button></h5>
       {% if request.user.is_authenticated %}
-        {% if car.quantity > 0 and not car.parchased_by %}
+        {% if car.quantity > 0 and not user_has_purchased %}
           <a href="{% url 'buy_car' car.id %}" class="btn btn-success">Buy Now</a>
+        {% elif user_has_purchased %}
+          <p class="text-danger">You have already purchased this car.</p>
         {% else %}
-          <p class="text-danger">Already purchased</p>
+          <p class="text-danger">Out of stock</p>
         {% endif %}
       {% endif %}
     </div>

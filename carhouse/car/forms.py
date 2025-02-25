@@ -4,7 +4,7 @@ from .models import Car,Comment
 class carform(forms.ModelForm):
     class Meta:
         model = Car
-        fields = '__all__'
+        exclude = ['purchased_by']
         
 class commentform(forms.ModelForm):
     class Meta:

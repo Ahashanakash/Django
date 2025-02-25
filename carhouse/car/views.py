@@ -12,7 +12,6 @@ from django.contrib import messages
 @method_decorator(login_required, name='dispatch')
 class add_car(CreateView):
     form_class = forms.carform
-    # template_name = 'album.html'
     success_url = reverse_lazy('homepage')
     def form_valid(self,form):
         form.instance.user = self.request.user
@@ -38,24 +37,28 @@ class Car_details(DetailView):
         comments = car.comments.all()  
         comment_form = forms.commentform()
 
+        user_has_purchased = self.request.user.is_authenticated and car.purchased_by == self.request.user
         context['comments'] = comments
         context['comment_form'] = comment_form
+        context['user_has_purchased'] = user_has_purchased
         return context
 
+@login_required
 def buy_car(request, car_id):
-    car = get_object_or_404(Car, id=car_id)
+    car = models.Car.objects.get(pk=car_id)
 
-    if car.parchased_by:
-        messages.warning(request, "This car has already been purchased.")
+    if car.purchased_by == request.user:
         return redirect('cardetails', id=car_id)
-
+    
     if car.quantity <= 0:
         messages.error(request, "This car is out of stock.")
-        return redirect('cardetails', id=car_id)
-
-    car.parchased_by = request.user
-    car.quantity -= 1
-    car.save()
-
-    messages.success(request, "Car purchased successfully!")
-    return redirect('profile1', id=request.user.id)
+        return redirect('cardetails', id=car_id)    
+    
+    else:
+        car.purchased_by = request.user
+        car.quantity -= 1
+        car.save()
+        messages.error(request, "Car purchased successfully!")
+        
+        return redirect ('profile')
+    

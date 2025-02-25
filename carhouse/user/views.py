@@ -51,16 +51,9 @@ class log_in(LoginView):
         context = super().get_context_data(**kwargs)
         context['type'] = 'Login'
         return context
-    
-@login_required
-def profile1(request, id):
-    user = get_object_or_404(User, pk=id)
-    cars_purchased = Car.objects.filter(parchased_by=user)
-
-    return render(request, 'profile.html', {'cars': cars_purchased, 'user': user})
 
 def profile(request):
-    data=Car.objects.filter(parchased_by=request.user)
+    data=Car.objects.filter(purchased_by=request.user)
     return render(request,'profile.html',{'data':data})
     
 @method_decorator(login_required, name='dispatch')

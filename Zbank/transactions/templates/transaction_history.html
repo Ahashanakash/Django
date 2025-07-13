@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">{{ type }}</h3>
+                </div>
+                <div class="card-body">
+                    {% if transactions %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Date & Time</th>
+                                        <th>Transaction Type</th>
+                                        <th>Amount</th>
+                                        <th>Balance After</th>
+                                        <th>Sender/Reciever</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for trans in transactions %}
+                                    <tr>
+                                        <td>
+                                            <small>{{ trans.timestamp|date:"M d, Y" }}</small><br>
+                            <small class="text-muted" data-utc-time="{{ trans.timestamp|date:'c' }}">{{ trans.timestamp|date:"g:i A" }}</small>
+                                        </td>
+                                        <td>
+                                            {% if trans.transaction_type == 'Add Money' %}
+                                                <span class="badge bg-success text-white">
+                                                    <i class="fas fa-plus me-1"></i>Add Money
+                                                </span>
+                                            {% elif trans.transaction_type == 'Cash Out' %}
+                                                <span class="badge bg-danger text-white">
+                                                    <i class="fas fa-minus me-1"></i>Cash Out
+                                                </span>
+                                            {% elif trans.transaction_type == 'Send Money' %}
+                                                <span class="badge bg-info text-white">
+                                                    <i class="fas fa-paper-plane me-1"></i>Send Money
+                                                </span>
+                                            {% elif trans.transaction_type == 'Loan Request' %}
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="fas fa-hand-holding-usd me-1"></i>Loan Request
+                                                </span>
+                                            {% elif trans.transaction_type == 'Loan Paid' %}
+                                                <span class="badge bg-primary text-white">
+                                                    <i class="fas fa-check-circle me-1"></i>Loan Paid
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-secondary text-white">
+                                                    <i class="fas fa-question me-1"></i>{{ trans.transaction_type }}
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if trans.transaction_type == 'Add Money' or trans.transaction_type == 'Loan Request' and  trans.loan_approve%}
+                                                <span class="text-success fw-bold">+{{ trans.amount|money_format }}</span>
+                                            {% elif trans.transaction_type == 'Cash Out' or trans.transaction_type == 'Send Money' or trans.transaction_type == 'Loan Paid'  %}
+                                                <span class="text-danger fw-bold">-{{ trans.amount|money_format }}</span>
+                                            {% else %}
+                                                <span class="text-dark fw-bold">{{ trans.amount|money_format }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="text-dark fw-bold">{{ trans.balance_after_transaction|money_format }}</span>
+                                        </td>
+                                        <td>
+                                            {% if trans.receiver %}
+                                                <small class="text-dark">
+                                                    <i class="fas fa-user me-1"></i>Account #{{ trans.receiver }}
+                                                </small>
+                                            {% elif trans.transaction_type == 'Loan Request' %}
+                                                <small class="text-dark">
+                                                    <i class="fas fa-hashtag me-1"></i>Loan #{{ trans.id }}
+                                                </small>
+                                            {% else %}
+                                                <small class="text-muted">
+                                                    <i class="fas fa-minus me-1"></i>N/A
+                                                </small>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if trans.transaction_type == 'Loan Request' %}
+                                                {% if trans.loan_approve %}
+                                                <span class="badge bg-success text-white">
+                                                    <i class="fas fa-check-circle me-1"></i>Completed
+                                                </span>
+                                                {% else %}
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="fas fa-clock me-1"></i>Pending
+                                                    </span>
+                                                {% endif %}
+                                            {% else %}
+                                                <span class="badge bg-success text-white">
+                                                    <i class="fas fa-check-circle me-1"></i>Completed
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Summary Statistics -->
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Transaction Summary</h6>
+                                        <div class="row text-center">
+                                            <div class="col-md-2">
+                                                <small class="text-muted">Total Transactions</small>
+                                                <h5>{{ summary.total_transactions }}</h5>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <small class="text-success">Total Deposits</small>
+                                                <h5 class="text-success">
+                                                    {{ summary.total_deposits|money_format }}
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <small class="text-danger">Total Withdrawals</small>
+                                                <h5 class="text-danger">
+                                                    {{ summary.total_withdrawals|money_format }}
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <small class="text-info">Total Transfers</small>
+                                                <h5 class="text-info">
+                                                    {{ summary.total_transfers|money_format }}
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <small class="text-warning">Pending Loans</small>
+                                                <h5 class="text-warning">
+                                                    {{ summary.pending_loans }}
+                                                </h5>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <small class="text-primary">Current Balance</small>
+                                                <h5 class="text-primary">
+                                                    {{ summary.current_balance|money_format }}
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center">
+                            <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No transaction history found.</p>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="text-center mt-3">
+                        <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

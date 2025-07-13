@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Zbank{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="text-center mb-5">
+            <h1 class="display-4 text-primary">Welcome to Zbank</h1>
+            <p class="lead">Your trusted partner for secure banking solutions</p>
+        </div>
+        
+        {% if user.is_authenticated %}
+            <div class="alert alert-success">
+                <h4 class="alert-heading">Welcome back, {{ user.get_full_name|default:user.username }}!</h4>
+                <p>You are successfully logged in. Access your banking features from the navigation menu above.</p>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-exchange-alt fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Transactions</h5>
+                            <p class="card-text">View and manage your transaction history</p>
+                            <a href="{% url 'transaction_history' %}" class="btn btn-primary">View Transactions</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+                            <h5 class="card-title">Pending Loans</h5>
+                            <p class="card-text">Check and pay your approved loans</p>
+                            <a href="{% url 'pending_loans' %}" class="btn btn-warning">View Loans</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-user fa-3x text-info mb-3"></i>
+                            <h5 class="card-title">Profile</h5>
+                            <p class="card-text">Manage your personal information</p>
+                            <a href="{% url 'profile' %}" class="btn btn-info">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-sign-in-alt fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">Already have an account?</h5>
+                            <p class="card-text">Sign in to access your banking dashboard</p>
+                            <a href="{% url 'log_in' %}" class="btn btn-primary btn-lg">Login</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i class="fas fa-user-plus fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">New to Zbank?</h5>
+                            <p class="card-text">Create an account to start banking with us</p>
+                            <a href="{% url 'signup' %}" class="btn btn-success btn-lg">Sign Up</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-5">
+                <h3 class="text-center mb-4">Why Choose Zbank?</h3>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-shield-alt fa-2x text-primary mb-3"></i>
+                        <h5>Secure Banking</h5>
+                        <p>Your security is our top priority with advanced encryption and fraud protection.</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-mobile-alt fa-2x text-success mb-3"></i>
+                        <h5>Mobile Banking</h5>
+                        <p>Access your accounts anywhere, anytime with our mobile banking app.</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-headset fa-2x text-info mb-3"></i>
+                        <h5>24/7 Support</h5>
+                        <p>Our customer support team is available round the clock to help you.</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

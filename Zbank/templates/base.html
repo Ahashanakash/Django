@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Zbank{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-pink: #e91e63;
+            --secondary-pink: #f8bbd9;
+            --dark-pink: #c2185b;
+            --light-pink: #fce4ec;
+        }
+        
+        .navbar-custom {
+            background: linear-gradient(135deg, var(--primary-pink), var(--dark-pink)) !important;
+            box-shadow: 0 2px 10px rgba(233, 30, 99, 0.3);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: white !important;
+        }
+        
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: var(--secondary-pink) !important;
+            transform: translateY(-2px);
+        }
+        
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        
+        .dropdown-item {
+            color: var(--primary-pink);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background-color: var(--light-pink);
+            color: var(--dark-pink);
+            transform: translateX(5px);
+        }
+        
+        .btn-auth {
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-login {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .btn-login:hover {
+            background-color: white;
+            color: var(--primary-pink);
+        }
+        
+        .btn-signup {
+            background-color: white;
+            color: var(--dark-pink);
+            border: 2px solid var(--secondary-pink);
+            font-weight: 600;
+        }
+        
+        .btn-signup:hover {
+            background-color: var(--light-pink);
+            border-color: var(--primary-pink);
+            color: var(--dark-pink);
+            transform: translateY(-2px);
+        }
+        
+        .user-welcome {
+            color: var(--secondary-pink);
+            font-style: italic;
+        }
+        
+        .main-content {
+            min-height: calc(100vh - 200px);
+            padding-top: 80px; /* Add padding to account for fixed navbar */
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, var(--primary-pink), var(--dark-pink));
+            color: white;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <!-- Brand/Logo -->
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-university me-2"></i>Zbank
+            </a>
+            
+            <!-- Mobile Toggle Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation Items -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    
+                    <!-- Services Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cogs me-1"></i>Services
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                            {% if user.is_authenticated %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'add_money' %}">
+                                        <i class="fas fa-plus-circle me-2"></i>Add Money
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'cashout' %}">
+                                        <i class="fas fa-minus-circle me-2"></i>Cash Out
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'send_money' %}">
+                                        <i class="fas fa-paper-plane me-2"></i>Send Money
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'loan' %}">
+                                        <i class="fas fa-hand-holding-usd me-2"></i>Loan Request
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'transaction_history' %}">
+                                        <i class="fas fa-history me-2"></i>Transaction History
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'pending_loans' %}">
+                                        <i class="fas fa-clock me-2"></i>Pending Loans
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'log_in' %}">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Login to Access Services
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-info-circle me-1"></i>About
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-blog me-1"></i>Blog
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Right Side Navigation -->
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <!-- Authenticated User Menu -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" 
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-1"></i>{{ user.get_full_name|default:user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'profile' %}">
+                                        <i class="fas fa-user me-2"></i>Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'edit_profile' %}">
+                                        <i class="fas fa-edit me-2"></i>Edit Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'pass_change' %}">
+                                        <i class="fas fa-key me-2"></i>Change Password
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{% url 'log_out' %}">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <!-- Non-Authenticated User Menu -->
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-auth btn-login me-2" href="{% url 'log_in' %}">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-auth btn-signup" href="{% url 'signup' %}">
+                                <i class="fas fa-user-plus me-1"></i>Sign Up
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Flash Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>{{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <!-- Page Content -->
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer text-center py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-university me-2"></i>Zbank</h5>
+                    <p class="small">Your trusted partner for secure banking solutions</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'home' %}" class="text-white">Home</a></li>
+                        <li><a href="#" class="text-white">About</a></li>
+                        <li><a href="#" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Connect With Us</h6>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-3">
+            <p class="mb-0">&copy; 2024 Zbank. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+
+    
+    <!-- Timezone Detection and Conversion Script -->
+    <script>
+        // Function to detect user's timezone and set cookie
+        function detectAndSetTimezone() {
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const expires = new Date();
+            expires.setFullYear(expires.getFullYear() + 1); // Cookie expires in 1 year
+            document.cookie = `user_timezone=${timezone}; expires=${expires.toUTCString()}; path=/`;
+            return timezone;
+        }
+
+        // Function to convert UTC datetime to local time
+        function convertToLocalTime(utcDateTimeString) {
+            if (!utcDateTimeString) return '';
+            
+            try {
+                const utcDate = new Date(utcDateTimeString);
+                if (isNaN(utcDate.getTime())) return utcDateTimeString; // Return original if invalid
+                
+                return utcDate.toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+            } catch (e) {
+                return utcDateTimeString; // Return original if conversion fails
+            }
+        }
+
+        // Function to convert all UTC timestamps on the page
+        function convertAllTimestamps() {
+            const timestampElements = document.querySelectorAll('[data-utc-time]');
+            timestampElements.forEach(element => {
+                const utcTime = element.getAttribute('data-utc-time');
+                const localTime = convertToLocalTime(utcTime);
+                if (localTime) {
+                    element.textContent = localTime;
+                }
+            });
+        }
+
+        // Initialize timezone detection and conversion
+        document.addEventListener('DOMContentLoaded', function() {
+            // Detect and set timezone if not already set
+            if (!document.cookie.includes('user_timezone=')) {
+                detectAndSetTimezone();
+            }
+            
+            // Convert all timestamps on page load
+            convertAllTimestamps();
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
